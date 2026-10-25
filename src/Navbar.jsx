@@ -1,324 +1,286 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Search, Menu, X, Heart } from 'lucide-react';
+import Logo from './Logo';
 
-export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const searchInputRef = useRef(null);
-  const location = useLocation();
-
-  const isHome = location.pathname === '/';
+export default function Navbar({ onOpenDonate, onOpenSearch }) {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 40);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    setMobileOpen(false);
-    setActiveDropdown(null);
-    setSearchOpen(false);
-  }, [location.pathname]);
+  const navLinks = [
+    { name: 'Our Story', href: '/#our-story' },
+    { name: 'Our Work', href: '/#our-initiatives' },
+    { name: 'People', href: '/#people' },
+    { name: 'Impact', href: '/#impact' },
+    { name: 'Stories', href: '/#stories' },
+    { name: 'Support a Cause', href: '/#get-involved', isDonate: true },
+  ];
 
-  const toggleSearch = () => {
-    if (!searchOpen) {
-      setSearchOpen(true);
-      setTimeout(() => searchInputRef.current?.focus(), 150);
-    } else {
-      setSearchOpen(false);
+  const handleNavClick = (href, isDonate) => {
+    setMobileMenuOpen(false);
+    if (isDonate) {
+      onOpenDonate();
+      return;
+    }
+    if (href.startsWith('/#')) {
+      const id = href.replace('/#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        const yOffset = -70;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
     }
   };
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      alert(`Searching Atharva Foundation for: "${searchQuery}"`);
-    }
-  };
-
-  const isTransparent = isHome && !scrolled && !mobileOpen;
 
   return (
-    <header className={`header-nav ${isTransparent ? 'transparent' : 'scrolled'}`}>
-      <div className="site-container">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
-          {/* Logo & National Badge */}
-          <Link
-            to="/"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '14px',
-              textDecoration: 'none'
-            }}
-            aria-label="Atharva Foundation Homepage"
+    <>
+      <header
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 40,
+          backgroundColor: '#FFFFFF',
+          borderBottom: '1px solid rgba(80, 13, 24, 0.08)',
+          boxShadow: isScrolled ? '0 4px 20px rgba(80, 13, 24, 0.06)' : 'none',
+          transition: 'all 0.3s ease',
+        }}
+      >
+        <div 
+          className="site-container"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: isScrolled ? '72px' : '82px',
+            transition: 'height 0.3s ease',
+          }}
+        >
+          {/* Logo (Dark variant for light background as shown in latest mockup) */}
+          <Link 
+            to="/" 
+            aria-label="Atharva Foundation — Home"
+            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <img
-              src="/images/atharva/assets_images_logo3.png"
-              alt="Atharva Foundation"
-              style={{
-                height: '52px',
-                width: 'auto',
-                filter: isTransparent ? 'brightness(0) invert(1)' : 'none',
-                transition: 'all 0.3s ease'
-              }}
-            />
-            <div
-              style={{
-                display: 'none',
-                borderLeft: isTransparent ? '1px solid rgba(255,255,255,0.3)' : '1px solid rgba(0,32,65,0.2)',
-                paddingLeft: '12px',
-                flexDirection: 'column'
-              }}
-              className="brand-subtext"
-            >
-              <span style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: isTransparent ? '#ffffff' : '#002041' }}>
-                One For All
-              </span>
-              <span style={{ fontSize: '10px', color: isTransparent ? '#00A4E1' : '#B27865', fontWeight: 600, letterSpacing: '0.08em' }}>
-                All For One
-              </span>
-            </div>
+            <Logo variant="dark" height={isScrolled ? 46 : 52} emblemOnly />
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav style={{ display: 'none' }} className="desktop-nav-menu" aria-label="Main Navigation">
-            <ul style={{ display: 'flex', alignItems: 'center', gap: '32px', listStyle: 'none' }}>
-              {/* About Us */}
-              <li
-                style={{ position: 'relative' }}
-                onMouseEnter={() => setActiveDropdown('about')}
-                onMouseLeave={() => setActiveDropdown(null)}
+          {/* Desktop Navigation Links */}
+          <nav 
+            className="hidden lg:flex" 
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '30px',
+            }}
+          >
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(link.href, link.isDonate);
+                }}
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '14.5px',
+                  fontWeight: 500,
+                  color: '#292321',
+                  textDecoration: 'none',
+                  letterSpacing: '0.01em',
+                  padding: '6px 2px',
+                  position: 'relative',
+                  transition: 'color 0.2s ease',
+                }}
+                className="hover:text-burgundy transition-colors"
               >
-                <Link
-                  to="/who-we-are"
-                  className={`nav-link ${location.pathname === '/who-we-are' ? 'active' : ''}`}
-                >
-                  <span>About Us</span>
-                  <svg width="12" height="12" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform 0.2s ease', transform: activeDropdown === 'about' ? 'rotate(180deg)' : 'none' }}>
-                    <path d="M4 6l5 5 5-5" />
-                  </svg>
-                </Link>
-
-                {activeDropdown === 'about' && (
-                  <div className="dropdown-panel">
-                    <Link to="/who-we-are" className="dropdown-link">Founder Message</Link>
-                    <Link to="/who-we-are#vision" className="dropdown-link">Our Vision & Mission</Link>
-                    <Link to="/who-we-are#trust" className="dropdown-link">Atharva Trust</Link>
-                    <a href="/#tribute" className="dropdown-link">Tribute to Martyrs</a>
-                  </div>
-                )}
-              </li>
-
-              {/* Initiatives */}
-              <li
-                style={{ position: 'relative' }}
-                onMouseEnter={() => setActiveDropdown('initiatives')}
-                onMouseLeave={() => setActiveDropdown(null)}
-              >
-                <Link
-                  to="/our-programs"
-                  className={`nav-link ${location.pathname === '/our-programs' ? 'active' : ''}`}
-                >
-                  <span>Our Initiatives</span>
-                  <svg width="12" height="12" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform 0.2s ease', transform: activeDropdown === 'initiatives' ? 'rotate(180deg)' : 'none' }}>
-                    <path d="M4 6l5 5 5-5" />
-                  </svg>
-                </Link>
-
-                {activeDropdown === 'initiatives' && (
-                  <div className="dropdown-panel">
-                    <Link to="/our-programs?tab=girlchild" className="dropdown-link">Girl Child Education</Link>
-                    <Link to="/our-programs?tab=martyrs" className="dropdown-link">Help Families of Martyrs</Link>
-                    <Link to="/our-programs?tab=computers" className="dropdown-link">100 Computers Program</Link>
-                    <Link to="/our-programs?tab=women" className="dropdown-link">Women Achievers Award</Link>
-                  </div>
-                )}
-              </li>
-
-              {/* Tribute to Soldiers */}
-              <li>
-                <a
-                  href="/#tribute"
-                  className="nav-link"
-                  onClick={(e) => {
-                    if (location.pathname === '/') {
-                      e.preventDefault();
-                      document.getElementById('tribute')?.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                >
-                  <span>Tribute to Armed Forces</span>
-                </a>
-              </li>
-
-              {/* Gallery & Impact */}
-              <li>
-                <a
-                  href="/#ideas"
-                  className="nav-link"
-                  onClick={(e) => {
-                    if (location.pathname === '/') {
-                      e.preventDefault();
-                      document.getElementById('ideas')?.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                >
-                  <span>Gallery & Stories</span>
-                </a>
-              </li>
-            </ul>
+                {link.name}
+              </a>
+            ))}
           </nav>
 
-          {/* Right Controls: Search, Donate Button & Mobile Toggle */}
+          {/* Action CTAs & Search */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            {/* Search Input Form */}
-            <form onSubmit={handleSearchSubmit} className="search-wrapper">
-              <input
-                ref={searchInputRef}
-                type="text"
-                placeholder="Search initiatives, martyrs..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={`search-input ${searchOpen ? 'open' : ''}`}
-              />
-              <button
-                type="button"
-                onClick={toggleSearch}
-                className="search-btn"
-                aria-label={searchOpen ? 'Close search' : 'Open search'}
-              >
-                {searchOpen ? (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                  </svg>
-                ) : (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                  </svg>
-                )}
-              </button>
-            </form>
-
-            {/* Quick Contact CTA */}
-            <a
-              href="#contact"
-              onClick={(e) => {
-                if (location.pathname === '/') {
-                  e.preventDefault();
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-              className="btn-pill"
+            {/* Search Button */}
+            <button
+              onClick={onOpenSearch}
+              aria-label="Search"
               style={{
-                display: 'none',
-                padding: '10px 20px',
-                fontSize: '11px'
+                background: 'rgba(80, 13, 24, 0.04)',
+                border: '1px solid rgba(80, 13, 24, 0.12)',
+                color: '#500D18',
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
               }}
+              className="hover:bg-amber-100 hover:scale-105"
+            >
+              <Search size={18} />
+            </button>
+
+            {/* Primary Action Button: "Get Involved →" matching mockup */}
+            <button
+              onClick={onOpenDonate}
+              style={{
+                backgroundColor: '#D9B45B',
+                color: '#500D18',
+                fontFamily: 'var(--font-sans)',
+                fontSize: '14.5px',
+                fontWeight: 700,
+                padding: '11px 24px',
+                borderRadius: '9999px',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 14px rgba(217, 180, 91, 0.35)',
+                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+              }}
+              className="hover:scale-105 active:scale-95"
             >
               <span>Get Involved</span>
-            </a>
+              <span style={{ fontSize: '16px' }}>→</span>
+            </button>
 
             {/* Mobile Hamburger Button */}
             <button
-              type="button"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="mobile-toggle-btn"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden"
+              aria-label="Toggle mobile menu"
               style={{
-                background: 'transparent',
+                background: 'none',
                 border: 'none',
-                color: isTransparent ? '#ffffff' : '#002041',
+                color: '#500D18',
+                padding: '6px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '6px'
               }}
-              aria-label="Toggle navigation menu"
             >
-              {mobileOpen ? (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              ) : (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <line x1="3" y1="6" x2="21" y2="6"></line>
-                  <line x1="3" y1="12" x2="21" y2="12"></line>
-                  <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-              )}
+              {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
             </button>
           </div>
         </div>
+      </header>
 
-        {/* Mobile Navigation Drawer */}
-        {mobileOpen && (
+      {/* Mobile Drawer Navigation */}
+      {mobileMenuOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 45,
+            backgroundColor: 'rgba(20, 4, 8, 0.65)',
+            backdropFilter: 'blur(6px)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            animation: 'fadeIn 0.2s ease',
+          }}
+          onClick={() => setMobileMenuOpen(false)}
+        >
           <div
             style={{
-              marginTop: '16px',
-              padding: '24px',
-              backgroundColor: 'var(--color-midnight)',
-              borderRadius: '8px',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
-              color: '#ffffff'
+              backgroundColor: '#FFFFFF',
+              borderBottom: '3px solid #D9B45B',
+              padding: '24px 20px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.25)',
+              animation: 'slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
+            onClick={(e) => e.stopPropagation()}
           >
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <li>
-                <Link to="/who-we-are" style={{ color: '#ffffff', textDecoration: 'none', fontSize: '15px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                  About Us & Founder Message
-                </Link>
-              </li>
-              <li>
-                <Link to="/our-programs" style={{ color: '#ffffff', textDecoration: 'none', fontSize: '15px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                  Our Initiatives
-                </Link>
-              </li>
-              <li>
-                <a href="/#tribute" style={{ color: '#ffffff', textDecoration: 'none', fontSize: '15px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                  Tribute to Indian Armed Forces
-                </a>
-              </li>
-              <li>
-                <a href="/#ideas" style={{ color: '#ffffff', textDecoration: 'none', fontSize: '15px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                  Gallery & Bravery Stories
-                </a>
-              </li>
-              <li>
-                <a href="/#contact" style={{ color: '#00A4E1', textDecoration: 'none', fontSize: '15px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                  Contact Us
-                </a>
-              </li>
-            </ul>
-          </div>
-        )}
-      </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <Logo variant="dark" height={44} emblemOnly />
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  background: 'rgba(80, 13, 24, 0.08)',
+                  border: 'none',
+                  color: '#500D18',
+                  borderRadius: '50%',
+                  padding: '6px',
+                  cursor: 'pointer',
+                }}
+              >
+                <X size={22} />
+              </button>
+            </div>
 
-      <style>{`
-        @media (min-width: 1024px) {
-          .desktop-nav-menu {
-            display: block !important;
-          }
-          .brand-subtext {
-            display: flex !important;
-          }
-          .mobile-toggle-btn {
-            display: none !important;
-          }
-          .btn-pill {
-            display: inline-flex !important;
-          }
-        }
-      `}</style>
-    </header>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '24px' }}>
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(link.href, link.isDonate);
+                  }}
+                  style={{
+                    fontFamily: 'var(--font-serif)',
+                    fontSize: '20px',
+                    color: '#500D18',
+                    textDecoration: 'none',
+                    padding: '8px 0',
+                    borderBottom: '1px solid rgba(80, 13, 24, 0.08)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <span>{link.name}</span>
+                  <span style={{ color: '#D9B45B', fontSize: '18px' }}>›</span>
+                </a>
+              ))}
+            </div>
+
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenDonate();
+              }}
+              style={{
+                width: '100%',
+                backgroundColor: '#D9B45B',
+                color: '#500D18',
+                padding: '14px',
+                borderRadius: '12px',
+                fontWeight: 700,
+                fontSize: '15px',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+              }}
+            >
+              <Heart size={18} fill="#500D18" />
+              <span>Get Involved & Support a Cause</span>
+            </button>
+
+            <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '12px', color: '#716A65' }}>
+              Atharva Foundation • An Initiative by Atharva Educational Trust
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

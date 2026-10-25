@@ -1,502 +1,2043 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import {
+  ArrowRight,
+  Play,
+  BookOpen,
+  Users,
+  Heart,
+  Sprout,
+  Shield,
+  Handshake,
+  GraduationCap,
+  Network,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  Trophy,
+  Send,
+  CheckCircle2,
+  ExternalLink
+} from 'lucide-react';
+import BotanicalLeaf from '../BotanicalLeaf';
 
 const HERO_SLIDES = [
   {
-    tag: 'NATIONAL TRIBUTE',
-    title: 'One For All | All For One: A Tribute to the Indian Armed Forces & Families of Martyrs',
-    image: '/images/atharva/assets_images_icons_ADGPI_Indian_Army.jpg',
-    isVideo: false,
-    ctaText: 'Explore Tribute',
-    link: '/our-programs',
+    tag: 'PEOPLE  OPPORTUNITIES  A STRONGER INDIA —',
+    title: 'Building a More Inclusive',
+    highlight: 'India.',
+    subtitle: 'Creating opportunities through education, empowerment, healthcare and community action for underprivileged sections of society.',
+    image: '/images/ui/hero_girl_clean.jpg',
+    fallbackImage: '/images/ui/hero_girl_school.jpg',
+    videoId: 'mPlUSVVlW5g',
+    stats: [
+      { icon: GraduationCap, num: '25,000+', label: 'Lives Impacted' },
+      { icon: Network, num: '120+', label: 'Communities' },
+      { icon: Heart, num: '200+', label: 'Volunteers' },
+      { icon: Sprout, num: '15+', label: 'Initiatives' },
+    ]
   },
   {
-    tag: 'GIRL CHILD EDUCATION',
-    title: 'Empowering Young Daughters Across Remote & Border Regions Through Quality Education',
-    image: '/images/atharva/assets_images_resource_cause-4.jpg',
-    isVideo: false,
-    ctaText: 'Learn More',
-    link: '/our-programs',
-  },
-  {
-    tag: 'MARTYRS WELFARE',
-    title: 'Commemorating the Selfless Sacrifices of Our Soldiers and Supporting Their Families',
+    tag: 'NATIONAL TRIBUTE —',
+    title: 'One For All | All For One:',
+    highlight: 'A Tribute to Martyrs.',
+    subtitle: 'Commemorating the selfless sacrifices of our Indian Armed Forces soldiers and extending lifelong welfare to martyr families.',
     image: '/images/atharva/assets_images_foundation-gallery_unsungheroes_cover.jpg',
-    isVideo: false,
-    ctaText: 'Watch Stories',
-    link: '/our-programs',
+    fallbackImage: '/images/atharva/assets_images_icons_ADGPI_Indian_Army.jpg',
+    videoId: 'mPlUSVVlW5g',
+    stats: [
+      { icon: Shield, num: '350+', label: 'Martyr Families' },
+      { icon: Network, num: '28', label: 'States Reached' },
+      { icon: Heart, num: '500+', label: 'Tributes Paid' },
+      { icon: Sprout, num: '10+', label: 'National Events' },
+    ]
   },
   {
-    tag: 'WOMEN EMPOWERMENT',
-    title: 'Women Achiever’s Awards: Celebrating Resilience, Courage & Grassroots Leadership',
-    image: '/images/atharva/assets_images_foundation-gallery_womensdayindiandefenceforce_cover.jpg',
-    isVideo: false,
-    ctaText: 'Discover Impact',
-    link: '/our-programs',
-  },
-];
-
-const INITIATIVES = [
-  {
-    title: 'Girl Child Education in Rural India',
-    description: 'Empowering young girls from economically disadvantaged backgrounds with scholarships, study kits, and school infrastructure to ensure no daughter is left behind.',
+    tag: 'GIRL CHILD EDUCATION —',
+    title: 'Empowering Young Daughters of',
+    highlight: 'India.',
+    subtitle: 'Providing scholarships, notebooks, school kits, and infrastructure to young daughters in remote and border villages.',
     image: '/images/atharva/assets_images_resource_cause-4.jpg',
-    link: '/our-programs',
+    fallbackImage: '/images/ui/belief_girl.jpg',
+    videoId: 'mPlUSVVlW5g',
+    stats: [
+      { icon: GraduationCap, num: '12,000+', label: 'Daughters Enrolled' },
+      { icon: Network, num: '85+', label: 'Rural Villages' },
+      { icon: Heart, num: '150+', label: 'Educators' },
+      { icon: Sprout, num: '100+', label: 'Computer Labs' },
+    ]
   },
   {
-    title: 'Assistance to Families of Martyrs',
-    description: 'Extending respectful financial, emotional, and educational assistance to the families and widows of our brave martyrs who laid down their lives for India.',
-    image: '/images/atharva/assets_images_gallery_gallery6.jpg',
-    link: '/our-programs',
-  },
-  {
-    title: '100 Computers for Daughters Program',
-    description: 'Bridging the digital divide by distributing modern computers and providing digital literacy training to young girls in remote and border villages.',
+    tag: 'DIGITAL EMPOWERMENT —',
+    title: '100 Computers for',
+    highlight: 'Daughters.',
+    subtitle: 'Pioneering digital literacy by setting up modern computer labs in remote schools and border areas of Rajasthan, Maharashtra, and Northeast.',
     image: '/images/atharva/assets_images_foundation-gallery_technologyawareness_cover.jpg',
-    link: '/our-programs',
+    fallbackImage: '/images/ui/story_digital.jpg',
+    videoId: 'mPlUSVVlW5g',
+    stats: [
+      { icon: GraduationCap, num: '100+', label: 'Computers Set Up' },
+      { icon: Network, num: '45+', label: 'Border Schools' },
+      { icon: Heart, num: '5,000+', label: 'Girls Trained' },
+      { icon: Sprout, num: '100%', label: 'Free Digital Access' },
+    ]
   },
   {
-    title: 'Women Achiever’s Awards',
-    description: 'An annual celebration acknowledging the outstanding courage and perseverance of women from the armed forces, sports, education, and rural entrepreneurship.',
+    tag: 'WOMEN ACHIEVER’S AWARDS —',
+    title: 'Celebrating Resilience, Courage &',
+    highlight: 'Leadership.',
+    subtitle: 'An annual celebration acknowledging the outstanding courage and perseverance of women from the armed forces, sports, and rural leadership.',
     image: '/images/atharva/assets_images_foundation-gallery_womensdayindiandefenceforce_cover.jpg',
-    link: '/our-programs',
+    fallbackImage: '/images/ui/story_women.jpg',
+    videoId: 'mPlUSVVlW5g',
+    stats: [
+      { icon: Users, num: '500+', label: 'Achievers Honored' },
+      { icon: Network, num: '60+', label: 'Clusters' },
+      { icon: Heart, num: '180+', label: 'Mentors' },
+      { icon: Sprout, num: '25+', label: 'Programs' },
+    ]
+  }
+];
+
+const INITIATIVES_DATA = [
+  {
+    id: 'education',
+    title: 'Girl Child Education in Rural India',
+    tag: 'EDUCATION FOR EVERY GIRL',
+    icon: BookOpen,
+    image: '/images/atharva/assets_images_resource_cause-4.jpg',
+    fallbackImage: '/images/ui/init_card1.jpg',
+    description: 'Empowering young girls from economically disadvantaged backgrounds with scholarships, study kits, and school infrastructure to ensure no daughter is left behind.',
   },
   {
+    id: 'martyrs',
+    title: 'Assistance to Families of Martyrs',
+    tag: 'STANDING WITH OUR BRAVEHEARTS',
+    icon: Shield,
+    image: '/images/atharva/assets_images_gallery_gallery6.jpg',
+    fallbackImage: '/images/ui/init_bravehearts.jpg',
+    description: 'Extending respectful financial, emotional, and educational assistance to the families and widows of our brave martyrs who laid down their lives for India.',
+  },
+  {
+    id: 'computers',
+    title: '100 Computers for Daughters Program',
+    tag: 'DIGITAL LITERACY',
+    icon: GraduationCap,
+    image: '/images/atharva/assets_images_foundation-gallery_technologyawareness_cover.jpg',
+    fallbackImage: '/images/ui/story_digital.jpg',
+    description: 'Bridging the digital divide by distributing modern computers and providing digital literacy training to young girls in remote and border villages.',
+  },
+  {
+    id: 'women',
+    title: 'Women Achiever’s Awards',
+    tag: 'WOMEN EMPOWERMENT',
+    icon: Users,
+    image: '/images/atharva/assets_images_foundation-gallery_womensdayindiandefenceforce_cover.jpg',
+    fallbackImage: '/images/ui/init_card2.jpg',
+    description: 'An annual celebration acknowledging the outstanding courage and perseverance of women from the armed forces, sports, education, and rural entrepreneurship.',
+  },
+  {
+    id: 'environment',
     title: 'Tree Plantation & Environmental Care',
-    description: 'Organizing extensive plantation drives across communities and promoting hygiene and sanitation in slum areas to foster healthy, sustainable living.',
+    tag: 'ENVIRONMENT & SANITATION',
+    icon: Sprout,
     image: '/images/atharva/assets_images_foundation-gallery_treeplantation_cover.jpg',
-    link: '/our-programs',
+    fallbackImage: '/images/ui/init_card4.jpg',
+    description: 'Organizing extensive plantation drives across communities and promoting hygiene and sanitation in slum areas to foster healthy, sustainable living.',
   },
   {
+    id: 'sports',
     title: 'Youth Sports & Talent Development',
-    description: 'Identifying and nurturing aspiring young athletes and sportspersons from less-privileged backgrounds to represent India on national and global stages.',
+    tag: 'YOUTH DEVELOPMENT',
+    icon: Trophy,
     image: '/images/atharva/assets_images_gallery_gallery10.jpg',
-    link: '/our-programs',
+    fallbackImage: '/images/ui/people_students.jpg',
+    description: 'Identifying and nurturing aspiring young athletes and sportspersons from less-privileged backgrounds to represent India on national and global stages.',
   },
 ];
 
-const IMPACT_PROGRAMS = [
-  'Girl Child Education & Rural Literacy',
-  'Support & Dignity for Martyr Families',
-  '100 Computers Initiative for Daughters',
-  'Women Achiever’s Awards & Skill Building',
-  'Cleanliness, Sanitation & Health Camps',
-  'Tree Plantation & Environmental Awareness',
-  'Sports Talent Mentorship & Youth Support',
+const GALLERY_PHOTOS = [
+  {
+    title: 'One For All Tribute at Wagah Border',
+    img: '/images/atharva/assets_images_foundation-gallery_wagahborder_1.jpg',
+    tag: 'National Tribute',
+  },
+  {
+    title: 'Teachers Day Felicitations',
+    img: '/images/atharva/assets_images_foundation-gallery_teachersday-25_td2.jpeg',
+    tag: 'Education',
+  },
+  {
+    title: 'Girl Child Study Kit Distribution',
+    img: '/images/atharva/assets_images_gallery_gallery1.jpg',
+    tag: 'Rural Literacy',
+  },
+  {
+    title: 'Martyrs Families Assistance Program',
+    img: '/images/atharva/assets_images_gallery_gallery5.jpg',
+    tag: 'Bravehearts',
+  },
+  {
+    title: 'Tree Plantation Drive with Youth',
+    img: '/images/atharva/assets_images_foundation-gallery_treeplantation_cover.jpg',
+    tag: 'Green India',
+  },
+  {
+    title: 'Youth Sports Mentorship on Ground',
+    img: '/images/atharva/assets_images_gallery_gallery10.jpg',
+    tag: 'Youth Talent',
+  },
+  {
+    title: 'Wagah Border Armed Forces Felicitation',
+    img: '/images/atharva/assets_images_foundation-gallery_wagahborder_2.jpg',
+    tag: 'Defense Tribute',
+  },
+  {
+    title: 'Women in Defense Force Awards',
+    img: '/images/atharva/assets_images_foundation-gallery_womenachieversawards_1.jpg',
+    tag: 'Women Achievers',
+  },
 ];
 
-export default function Home() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [videoModalOpen, setVideoModalOpen] = useState(false);
-  const [activeVideoId, setActiveVideoId] = useState('mPlUSVVlW5g');
-  const [isHoveringDock, setIsHoveringDock] = useState(false);
+export default function Home({ onOpenDonate, onOpenFounder, onOpenVideo }) {
+  const [currentHeroSlide, setCurrentHeroSlide] = useState(0);
+  const initiativesTrackRef = useRef(null);
 
   // Form State
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', city: '', message: '' });
-  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({ name: '', phone: '', email: '', city: '', message: '' });
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
-  const carouselTrackRef = useRef(null);
-
-  // Auto-advance hero carousel every 7 seconds
+  // Auto-advance hero slides every 8 seconds
   useEffect(() => {
-    if (isHoveringDock) return;
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 7000);
+      setCurrentHeroSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 8000);
     return () => clearInterval(timer);
-  }, [isHoveringDock]);
+  }, []);
 
-  const scrollCarousel = (direction) => {
-    if (carouselTrackRef.current) {
-      const scrollAmount = direction === 'next' ? 420 : -420;
-      carouselTrackRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  const slide = HERO_SLIDES[currentHeroSlide];
+
+  const handleNextHero = () => {
+    setCurrentHeroSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+  };
+
+  const handlePrevHero = () => {
+    setCurrentHeroSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+  };
+
+  const handleInitiativeNav = (direction) => {
+    const track = initiativesTrackRef.current;
+    if (!track) return;
+
+    // Seek the infinite marquee animation instead of restarting it, so the
+    // loop always stays seamless.
+    const animation = track.getAnimations?.()[0];
+    if (animation) {
+      const step = direction === 'next' ? 1600 : -1600;
+      animation.currentTime = Math.max(0, Number(animation.currentTime || 0) + step);
+      animation.play();
+      return;
+    }
+
+    // Fallback for browsers that do not expose CSS animations.
+    const card = track.querySelector('.initiative-card');
+    const step = card ? card.getBoundingClientRect().width + 28 : 360;
+    track.scrollBy({
+      left: direction === 'next' ? step : -step,
+      behavior: 'smooth',
+    });
+  };
+
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const yOffset = -70;
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
 
-  const openVideo = (youtubeId) => {
-    setActiveVideoId(youtubeId);
-    setVideoModalOpen(true);
-  };
-
-  const handleFormSubmit = (e) => {
+  const handleContactSubmit = (e) => {
     e.preventDefault();
-    if (formData.email) {
-      setSubmitted(true);
+    if (formData.name && formData.email) {
+      setFormSubmitted(true);
     }
+  };
+
+  const renderInitiativeCard = (item, key, duplicate = false) => {
+    const Icon = item.icon;
+    return (
+      <article
+        key={key}
+        className="initiative-card editorial-card"
+        aria-hidden={duplicate ? 'true' : undefined}
+        style={{
+          backgroundColor: '#F8F3E9',
+          borderRadius: '22px',
+          overflow: 'hidden',
+          border: '1px solid rgba(80, 13, 24, 0.08)',
+        }}
+      >
+        <div className="card-img-wrap" style={{ height: 'clamp(220px, 23vw, 290px)', position: 'relative' }}>
+          <img
+            src={item.image}
+            alt={item.title}
+            loading="lazy"
+            onError={(e) => {
+              e.currentTarget.src = item.fallbackImage;
+            }}
+          />
+
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '-22px',
+              left: '22px',
+              width: '48px',
+              height: '48px',
+              borderRadius: '50%',
+              backgroundColor: '#FFFFFF',
+              border: '2px solid #D9B45B',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#500D18',
+              boxShadow: '0 4px 12px rgba(80, 13, 24, 0.15)',
+              zIndex: 2,
+            }}
+          >
+            <Icon size={21} />
+          </div>
+        </div>
+
+        <div style={{ padding: '34px 26px 26px 26px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <span
+            style={{
+              fontSize: '10.5px',
+              letterSpacing: '0.12em',
+              color: '#D9B45B',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              marginBottom: '7px',
+            }}
+          >
+            {item.tag}
+          </span>
+          <h3
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: '21px',
+              color: '#500D18',
+              marginBottom: '10px',
+              lineHeight: '1.25',
+            }}
+          >
+            {item.title}
+          </h3>
+          <p style={{ fontSize: '14px', color: '#716A65', lineHeight: '1.62', flex: 1, marginBottom: '20px' }}>
+            {item.description}
+          </p>
+          <div>
+            <button
+              onClick={onOpenDonate}
+              tabIndex={duplicate ? -1 : undefined}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#500D18',
+                fontWeight: 700,
+                fontSize: '13.5px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                cursor: 'pointer',
+                padding: 0,
+              }}
+              className="hover:text-amber-600 transition-colors"
+            >
+              <span>Support Initiative</span>
+              <ArrowRight size={15} />
+            </button>
+          </div>
+        </div>
+      </article>
+    );
   };
 
   return (
-    <div style={{ backgroundColor: 'var(--color-quartz)', minHeight: '100vh' }}>
-      {/* 1. HERO CAROUSEL */}
-      <section className="hero-section" aria-label="Atharva Foundation Highlights">
-        <div className="hero-gradient-overlay" />
+    <div style={{ backgroundColor: '#F8F3E9', minHeight: '100vh', overflowX: 'hidden' }}>
 
-        {/* Media Background Slides */}
-        {HERO_SLIDES.map((slide, idx) => (
-          <div
-            key={idx}
-            className={`hero-slide ${idx === currentSlide ? 'active' : ''}`}
-            aria-hidden={idx !== currentSlide}
-          >
-            <img
-              src={slide.image}
-              alt={slide.title}
-              className="hero-slide-media"
-              loading={idx === 0 ? 'eager' : 'lazy'}
-            />
-          </div>
-        ))}
-
-        {/* 4 Bottom Cards Dock */}
+      {/* ========================================================
+          SECTION 1: HERO (WITH ATHARVA FOUNDATION AUTHENTIC SLIDES)
+          ======================================================== */}
+      <section
+        id="hero"
+        style={{
+          position: 'relative',
+          backgroundColor: '#380C14',
+          color: '#FFFFFF',
+          borderBottomLeftRadius: 'clamp(28px, 4.5vw, 56px)',
+          borderBottomRightRadius: 'clamp(28px, 4.5vw, 56px)',
+          overflow: 'hidden',
+          boxShadow: '0 20px 50px rgba(56, 12, 20, 0.25)',
+        }}
+      >
         <div
-          className="hero-dock"
-          onMouseEnter={() => setIsHoveringDock(true)}
-          onMouseLeave={() => setIsHoveringDock(false)}
+          className="site-container"
+          style={{
+            position: 'relative',
+            zIndex: 2,
+            minHeight: 'clamp(580px, 82vh, 760px)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            paddingTop: '64px',
+            paddingBottom: '36px',
+          }}
         >
-          {HERO_SLIDES.map((slide, idx) => {
-            const isActive = idx === currentSlide;
-            return (
+          {/* Two-column: left = text content, right = image */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '40px',
+              alignItems: 'center',
+              flex: 1,
+              marginTop: 'auto',
+              marginBottom: 'auto',
+            }}
+            className="hero-split-grid"
+          >
+            {/* LEFT: Text Content */}
+            <div>
               <div
-                key={idx}
-                onClick={() => setCurrentSlide(idx)}
-                className={`hero-card ${isActive ? 'active' : 'inactive'}`}
-                role="tab"
-                aria-selected={isActive}
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    setCurrentSlide(idx);
-                  }
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: '#D9B45B',
+                  marginBottom: '18px',
                 }}
               >
-                <div>
-                  <span className="hero-card-tag">{slide.tag}</span>
-                  <hr className="duo-line" style={{ marginBottom: '16px' }} />
-                  <h3>{slide.title}</h3>
-                </div>
-
-                {isActive && (
-                  <div style={{ marginTop: '20px' }}>
-                    <Link to={slide.link} className="btn-pill" onClick={(e) => e.stopPropagation()}>
-                      <span>{slide.ctaText}</span>
-                      <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <path d="M4 9h10M10 5l4 4-4 4" />
-                      </svg>
-                    </Link>
-                  </div>
-                )}
+                <span>{slide.tag}</span>
               </div>
-            );
-          })}
+
+              <h1
+                style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: 'clamp(30px, 3.8vw, 58px)',
+                  lineHeight: '1.1',
+                  color: '#FFFFFF',
+                  fontWeight: 700,
+                  marginBottom: '18px',
+                }}
+              >
+                {slide.title} <br className="hidden sm:inline" />
+                <span style={{ color: '#D9B45B' }}>{slide.highlight}</span>
+              </h1>
+
+              <p
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: 'clamp(14px, 1.4vw, 17px)',
+                  color: 'rgba(255, 255, 255, 0.88)',
+                  lineHeight: '1.65',
+                  marginBottom: '32px',
+                  maxWidth: '480px',
+                }}
+              >
+                {slide.subtitle}
+              </p>
+
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', alignItems: 'center' }}>
+                <button
+                  onClick={() => scrollTo('our-initiatives')}
+                  className="btn-gold"
+                  style={{ fontSize: '15px', padding: '13px 28px' }}
+                >
+                  <span>Explore Our Work</span>
+                  <ArrowRight size={17} />
+                </button>
+
+                <button
+                  onClick={() => onOpenVideo(slide.videoId || 'mPlUSVVlW5g')}
+                  style={{
+                    backgroundColor: 'rgba(56, 12, 20, 0.75)',
+                    backdropFilter: 'blur(6px)',
+                    color: '#FFFFFF',
+                    border: '1.5px solid rgba(217, 180, 91, 0.5)',
+                    padding: '12px 24px',
+                    borderRadius: '9999px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    fontWeight: 600,
+                    fontSize: '15px',
+                    cursor: 'pointer',
+                    transition: 'all 0.25s ease',
+                  }}
+                  className="hover:border-amber-400 hover:scale-105"
+                >
+                  <div
+                    style={{
+                      width: '26px',
+                      height: '26px',
+                      borderRadius: '50%',
+                      backgroundColor: '#D9B45B',
+                      color: '#380C14',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Play size={12} fill="#380C14" style={{ marginLeft: '2px' }} />
+                  </div>
+                  <span>Watch Our Story</span>
+                </button>
+              </div>
+            </div>
+
+            {/* RIGHT: Hero Image */}
+            <div className="hero-image-col" key={currentHeroSlide}>
+              <img
+                src={slide.image}
+                alt={slide.title}
+                onError={(e) => {
+                  if (e.currentTarget.src !== window.location.origin + slide.fallbackImage) {
+                    e.currentTarget.src = slide.fallbackImage;
+                  }
+                }}
+                style={{
+                  width: '100%',
+                  height: 'clamp(360px, 55vh, 560px)',
+                  objectFit: 'cover',
+                  objectPosition: 'center top',
+                  display: 'block',
+                  animation: 'heroImageIn 0.85s ease both',
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Bottom Bar: Stats, Scroll explore, and Carousel switcher */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '24px',
+              paddingTop: '28px',
+              borderTop: '1px solid rgba(255, 255, 255, 0.12)',
+            }}
+          >
+            {/* Stats row */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, auto)',
+                gap: 'clamp(16px, 2.5vw, 36px)',
+              }}
+              className="grid grid-cols-2 sm:grid-cols-4"
+            >
+              {slide.stats.map((st, i) => {
+                const Icon = st.icon;
+                return (
+                  <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#D9B45B', marginBottom: '2px' }}>
+                      <Icon size={18} strokeWidth={2} />
+                      <span style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', fontWeight: 700, color: '#FFFFFF' }}>
+                        {st.num}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: '11.5px', color: 'rgba(255, 255, 255, 0.75)', whiteSpace: 'nowrap' }}>
+                      {st.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Scroll to explore center indicator */}
+            <div
+              onClick={() => scrollTo('our-story')}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                cursor: 'pointer',
+                opacity: 0.85,
+                transition: 'opacity 0.2s',
+              }}
+              className="hidden lg:flex hover:opacity-100"
+            >
+              <div
+                style={{
+                  width: '20px',
+                  height: '32px',
+                  borderRadius: '10px',
+                  border: '1.5px solid rgba(255, 255, 255, 0.6)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  paddingTop: '6px',
+                  marginBottom: '4px',
+                }}
+              >
+                <div
+                  style={{
+                    width: '3px',
+                    height: '6px',
+                    backgroundColor: '#D9B45B',
+                    borderRadius: '2px',
+                    animation: 'bounce 1.5s infinite',
+                  }}
+                />
+              </div>
+              <span style={{ fontSize: '11px', letterSpacing: '0.05em', color: 'rgba(255, 255, 255, 0.8)' }}>
+                Scroll to explore
+              </span>
+              <ChevronDown size={14} color="#D9B45B" />
+            </div>
+
+            {/* Carousel navigation & slide count */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <button
+                  onClick={handlePrevHero}
+                  aria-label="Previous slide"
+                  style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '50%',
+                    backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                    border: '1px solid rgba(255, 255, 255, 0.25)',
+                    color: '#FFFFFF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                  }}
+                  className="hover:bg-amber-400 hover:text-burgundy"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  onClick={handleNextHero}
+                  aria-label="Next slide"
+                  style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '50%',
+                    backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                    border: '1px solid rgba(255, 255, 255, 0.25)',
+                    color: '#FFFFFF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                  }}
+                  className="hover:bg-amber-400 hover:text-burgundy"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+
+              <div style={{ fontSize: '13px', fontWeight: 600, color: '#D9B45B', letterSpacing: '0.05em' }}>
+                0{currentHeroSlide + 1} / 0{HERO_SLIDES.length}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* 2. ABOUT US SECTION */}
-      <section id="about-us" className="about-section">
+      {/* ========================================================
+          SECTION 2: OUR STORY (Empowering People. Building Communities.)
+          ======================================================== */}
+      <section
+        id="our-story"
+        style={{
+          paddingTop: '70px',
+          paddingBottom: '80px',
+          position: 'relative',
+          backgroundColor: '#F8F3E9',
+          overflow: 'hidden',
+        }}
+      >
+        <div style={{ position: 'absolute', bottom: '-20px', right: '4%', opacity: 0.12, pointerEvents: 'none' }}>
+          <BotanicalLeaf width={320} height={320} color="#500D18" opacity={0.5} />
+        </div>
+
         <div className="site-container">
-          <div className="section-badge-wrapper">
-            <span className="section-badge">About Us</span>
-            <hr className="duo-line" />
-          </div>
-
-          <div className="about-header-grid">
-            <div>
-              <h2 className="about-title font-medium-serif">
-                Nation First. <br />
-                Driven by Compassion & Service.
-              </h2>
-            </div>
-            <div>
-              <p className="text-lead">
-                Atharva Foundation is an initiative of The Atharva Educational Trust, the brain child of Shri Sunil Rane. Shri Sunil Rane believes that the growth of a nation depends on the growth of the various sections of its society. This noble thought has led to the formation of Atharva Foundation, looking after the not-so-privileged sections of our society and bringing about a positive change in the lives of the less fortunate people of India.
-              </p>
-            </div>
-          </div>
-
-          {/* 2 Feature Cards */}
-          <div className="feature-cards-grid">
-            {/* Card 1: Founder Vision */}
-            <Link to="/who-we-are" className="feature-card">
-              <div className="feature-card-image-wrap">
+          <div
+            className="story-grid"
+            style={{
+              display: 'grid',
+              gap: '48px',
+              alignItems: 'center',
+            }}
+          >
+            {/* Left Photo of Shri Sunil Rane and Children */}
+            <div className="story-photo-wrap">
+              <div className="story-photo-accent" aria-hidden="true" />
+              <div className="story-photo">
                 <img
                   src="/images/atharva/assets_images_resource_1J6A2037.jpg"
-                  alt="Shri Sunil Rane, Founder and Chairman"
-                  className="feature-card-image"
-                  style={{ objectPosition: 'top center' }}
-                  loading="lazy"
+                  alt="Shri Sunil Rane with Children - Atharva Foundation"
+                  onError={(e) => {
+                    e.currentTarget.src = '/images/ui/story_classroom_children.jpg';
+                  }}
                 />
+                <div className="story-photo-caption">
+                  Shri Sunil Rane · Founder &amp; Chairman
+                </div>
               </div>
-              <h3 className="feature-card-title">Founder's Message: Shri Sunil Rane</h3>
-              <p className="feature-card-desc">
-                An action-oriented and visionary leader with a simple agenda — “Nation First”. He believes that rather than waiting for support from others, we must take the initiative to educate girls, support martyrs' families, and uplift society.
-              </p>
-            </Link>
+            </div>
 
-            {/* Card 2: One For All */}
-            <div id="tribute" className="feature-card" onClick={() => openVideo('mPlUSVVlW5g')} style={{ cursor: 'pointer' }}>
-              <div className="feature-card-image-wrap">
-                <img
-                  src="/images/atharva/assets_images_foundation-gallery_wagahborder_cover.jpg"
-                  alt="One For All, All For One - Tribute to Indian Army"
-                  className="feature-card-image"
-                  loading="lazy"
-                />
-              </div>
-              <h3 className="feature-card-title">One For All | All For One</h3>
-              <p className="feature-card-desc">
-                An effort towards throwing light on the selfless contribution and sacrifice of our brave soldiers. Moving stories of courage and grit commemorated in the presence of dignitaries, armed forces, and thousands of civilians.
+            {/* Right Story Text */}
+            <div style={{ maxWidth: '640px' }}>
+              <span className="category-badge">— OUR STORY</span>
+
+              <h2
+                style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: 'clamp(30px, 3.8vw, 46px)',
+                  lineHeight: '1.18',
+                  color: '#500D18',
+                  marginBottom: '16px',
+                }}
+              >
+                Nation First. <br />
+                Empowering People. Building Communities.
+              </h2>
+
+              <p
+                style={{
+                  fontSize: '15.5px',
+                  color: '#292321',
+                  lineHeight: '1.7',
+                  marginBottom: '18px',
+                  maxWidth: '560px',
+                }}
+              >
+                Atharva Foundation is an initiative of The Atharva Educational Trust, founded by Shri Sunil Rane. He believes that the growth of a nation depends on the growth of the various sections of its society. This noble thought has led to the formation of Atharva Foundation, looking after the not-so-privileged sections of our society and bringing about a positive change in the lives of the less fortunate people of India.
               </p>
+
+              <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
+                <button
+                  onClick={onOpenFounder}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#500D18',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14.5px',
+                    fontWeight: 700,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    cursor: 'pointer',
+                    padding: 0,
+                  }}
+                  className="hover:text-amber-600 transition-colors"
+                >
+                  <div
+                    style={{
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '50%',
+                      border: '1.5px solid #500D18',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <ArrowRight size={16} />
+                  </div>
+                  <span>Founder's Message & Vision</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. ANTHEM VIDEO SECTION */}
-      <section className="anthem-section">
+      {/* ========================================================
+          SECTION 3: OUR INITIATIVES (6 AUTHENTIC FLAGSHIP INITIATIVES)
+          ======================================================== */}
+      <section
+        id="our-initiatives"
+        style={{
+          paddingTop: '80px',
+          paddingBottom: '80px',
+          backgroundColor: '#FFFFFF',
+          borderTop: '1px solid rgba(80, 13, 24, 0.08)',
+          borderBottom: '1px solid rgba(80, 13, 24, 0.08)',
+          position: 'relative',
+        }}
+      >
         <div className="site-container">
-          <div className="anthem-box">
-            <div className="anthem-header">
-              <h2 className="anthem-title font-medium-serif">
-                A Tribute to the Bravehearts of the Indian Armed Forces
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+              flexWrap: 'wrap',
+              gap: '24px',
+              marginBottom: '40px',
+            }}
+          >
+            <div style={{ maxWidth: '640px' }}>
+              <span className="category-badge">OUR INITIATIVES —</span>
+              <h2
+                style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: 'clamp(28px, 3.8vw, 44px)',
+                  color: '#500D18',
+                  lineHeight: '1.16',
+                  marginBottom: '12px',
+                }}
+              >
+                Focused on People. <br className="hidden sm:inline" />
+                Driven by Impact.
               </h2>
-              <p className="text-lead">
-                Ten untold stories of soldiers who have been pillars of grit and mettle commemorated through heartfelt wartime tales of courage, patriotism, and sacrifice. Watch the Atharva Foundation tribute documentary below.
+              <p style={{ fontSize: '15px', color: '#716A65', lineHeight: '1.65' }}>
+                We believe in direct action on ground zero. From remote villages in the Himalayas and border regions of Rajasthan to Maharashtra and the Northeast, Atharva Foundation brings education, technology, and direct family support where it is needed most.
               </p>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <button
+                onClick={() => handleInitiativeNav('prev')}
+                aria-label="Previous initiative"
+                style={{
+                  width: '42px',
+                  height: '42px',
+                  borderRadius: '50%',
+                  border: '1.5px solid rgba(80, 13, 24, 0.2)',
+                  backgroundColor: '#FFFFFF',
+                  color: '#500D18',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
+                className="hover:border-burgundy hover:bg-amber-50"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <button
+                onClick={() => handleInitiativeNav('next')}
+                aria-label="Next initiative"
+                style={{
+                  width: '42px',
+                  height: '42px',
+                  borderRadius: '50%',
+                  border: '1.5px solid rgba(80, 13, 24, 0.2)',
+                  backgroundColor: '#FFFFFF',
+                  color: '#500D18',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
+                className="hover:border-burgundy hover:bg-amber-50"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
+          </div>
+
+          {/* Initiatives Cards Grid */}
+          {/* Infinite auto-scrolling initiatives marquee — 3 large cards visible at a time */}
+          <div className="initiatives-marquee" style={{ marginBottom: '42px' }}>
+            <div className="initiatives-marquee-track" ref={initiativesTrackRef}>
+              {[0, 1].map((group) => (
+                <div
+                  className="initiatives-marquee-group"
+                  key={group}
+                  aria-hidden={group === 1 ? 'true' : undefined}
+                >
+                  {INITIATIVES_DATA.map((item) =>
+                    renderInitiativeCard(item, `${group}-${item.id}`, group === 1)
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="initiatives-marquee-hint">
+            <span />
+            Hover to pause · Auto-scrolling
+          </div>
+
+          {/* Sub-Banner: Our Approach */}
+          <div
+            id="our-approach"
+            style={{
+              backgroundColor: '#310A10',
+              borderRadius: '24px',
+              overflow: 'hidden',
+              position: 'relative',
+              color: '#FFFFFF',
+              boxShadow: '0 20px 45px rgba(49, 10, 16, 0.35)',
+              border: '1px solid rgba(217, 180, 91, 0.3)',
+            }}
+          >
+            <div style={{ position: 'absolute', top: '-20px', left: '-20px', opacity: 0.15, pointerEvents: 'none' }}>
+              <BotanicalLeaf width={260} height={260} color="#D9B45B" opacity={0.6} />
             </div>
 
             <div
-              className="anthem-video-card"
-              onClick={() => openVideo('mPlUSVVlW5g')}
-              role="button"
-              tabIndex={0}
-              aria-label="Play Atharva Foundation Tribute Documentary"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') openVideo('mPlUSVVlW5g');
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                alignItems: 'center',
               }}
             >
-              <img
-                src="/images/atharva/assets_images_foundation-gallery_unsungheroes_cover.jpg"
-                alt="One For All Tribute - Atharva Foundation"
-                className="anthem-poster"
-                loading="lazy"
-              />
-              <div className="anthem-play-btn" aria-hidden="true">
-                <svg width="24" height="24" viewBox="0 0 18 18" fill="currentColor">
-                  <path d="M5 3l10 6-10 6V3z" />
-                </svg>
+              <div style={{ padding: '40px 36px', zIndex: 2 }}>
+                <span style={{ fontSize: '11px', letterSpacing: '0.12em', color: '#D9B45B', fontWeight: 700, textTransform: 'uppercase' }}>
+                  OUR APPROACH —
+                </span>
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-serif)',
+                    fontSize: 'clamp(24px, 3.2vw, 36px)',
+                    color: '#FFFFFF',
+                    lineHeight: '1.2',
+                    margin: '8px 0 14px 0',
+                  }}
+                >
+                  People at the heart <br className="hidden sm:inline" />
+                  of everything <span style={{ color: '#D9B45B', fontStyle: 'italic' }}>we do.</span>
+                </h3>
+                <p style={{ fontSize: '14.5px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.65', marginBottom: '24px', maxWidth: '440px' }}>
+                  We work closely with communities, armed forces, partners and volunteers to create sustainable and long-lasting ground impact across India.
+                </p>
+                <button
+                  onClick={onOpenDonate}
+                  className="btn-gold"
+                  style={{ fontSize: '14px' }}
+                >
+                  <span>Explore All Initiatives</span>
+                  <ArrowRight size={16} />
+                </button>
+              </div>
+
+              <div style={{ height: '100%', minHeight: '260px', position: 'relative' }}>
+                <img
+                  src="/images/atharva/assets_images_resource_1J6A2037.jpg"
+                  alt="Atharva Foundation Community Approach"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                  }}
+                  onError={(e) => {
+                    e.currentTarget.src = '/images/ui/approach_banner.jpg';
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to right, #310A10 0%, transparent 40%)',
+                  }}
+                  className="hidden md:block"
+                />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 4. OUR INITIATIVES CAROUSEL */}
-      <section id="ideas" className="ideas-section">
-        <div className="site-container" style={{ position: 'relative' }}>
-          <div className="section-badge-wrapper">
-            <span className="section-badge">Our Initiatives</span>
-            <hr className="duo-line" />
-          </div>
-
-          <div className="ideas-header-grid">
+      {/* ========================================================
+          SECTION 4: GROUND IMPACT & STATS
+          ======================================================== */}
+      <section
+        id="impact"
+        style={{
+          paddingTop: '90px',
+          paddingBottom: '0px',
+          backgroundColor: '#F8F3E9',
+          position: 'relative',
+        }}
+      >
+        <div className="site-container">
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+              gap: '48px',
+              alignItems: 'center',
+              marginBottom: '60px',
+            }}
+          >
             <div>
-              <h2 className="about-title font-medium-serif">We invest in humanitarian action</h2>
-            </div>
-            <div>
-              <p className="text-lead">
-                We believe in direct action on ground zero. From remote villages in the Himalayas and border regions of Rajasthan to Maharashtra and the Northeast, the Atharva Foundation brings education, technology, and direct family support where it is needed most.
+              <span className="category-badge">OUR IMPACT —</span>
+              <h2
+                style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: 'clamp(32px, 4vw, 48px)',
+                  color: '#500D18',
+                  lineHeight: '1.15',
+                  marginBottom: '16px',
+                }}
+              >
+                Action with measurable <br />
+                <span style={{ color: '#D9B45B', fontStyle: 'italic' }}>ground impact.</span>
+              </h2>
+              <p style={{ fontSize: '15px', color: '#716A65', lineHeight: '1.7', marginBottom: '32px', maxWidth: '480px' }}>
+                The Atharva Foundation focuses on sustainable, empowering outcomes. Rather than short-term fixes, we build computer labs, provide educational scholarships, and stand with martyrs' families with lifelong dignity.
               </p>
+
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2, 1fr)',
+                  gap: '16px',
+                  marginBottom: '32px',
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    padding: '20px',
+                    borderRadius: '16px',
+                    border: '1px solid rgba(80, 13, 24, 0.08)',
+                    boxShadow: '0 4px 14px rgba(80, 13, 24, 0.03)',
+                  }}
+                >
+                  <div style={{ color: '#500D18', marginBottom: '8px' }}>
+                    <GraduationCap size={24} />
+                  </div>
+                  <div style={{ fontFamily: 'var(--font-serif)', fontSize: '28px', fontWeight: 700, color: '#500D18' }}>
+                    25,000+
+                  </div>
+                  <div style={{ fontSize: '12.5px', color: '#716A65', fontWeight: 500 }}>
+                    Lives Impacted
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    padding: '20px',
+                    borderRadius: '16px',
+                    border: '1px solid rgba(80, 13, 24, 0.08)',
+                    boxShadow: '0 4px 14px rgba(80, 13, 24, 0.03)',
+                  }}
+                >
+                  <div style={{ color: '#500D18', marginBottom: '8px' }}>
+                    <Shield size={24} />
+                  </div>
+                  <div style={{ fontFamily: 'var(--font-serif)', fontSize: '28px', fontWeight: 700, color: '#500D18' }}>
+                    350+
+                  </div>
+                  <div style={{ fontSize: '12.5px', color: '#716A65', fontWeight: 500 }}>
+                    Martyr Families Supported
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    padding: '20px',
+                    borderRadius: '16px',
+                    border: '1px solid rgba(80, 13, 24, 0.08)',
+                    boxShadow: '0 4px 14px rgba(80, 13, 24, 0.03)',
+                  }}
+                >
+                  <div style={{ color: '#500D18', marginBottom: '8px' }}>
+                    <GraduationCap size={24} />
+                  </div>
+                  <div style={{ fontFamily: 'var(--font-serif)', fontSize: '28px', fontWeight: 700, color: '#500D18' }}>
+                    100+
+                  </div>
+                  <div style={{ fontSize: '12.5px', color: '#716A65', fontWeight: 500 }}>
+                    Computers to Daughters
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    padding: '20px',
+                    borderRadius: '16px',
+                    border: '1px solid rgba(80, 13, 24, 0.08)',
+                    boxShadow: '0 4px 14px rgba(80, 13, 24, 0.03)',
+                  }}
+                >
+                  <div style={{ color: '#500D18', marginBottom: '8px' }}>
+                    <Sprout size={24} />
+                  </div>
+                  <div style={{ fontFamily: 'var(--font-serif)', fontSize: '28px', fontWeight: 700, color: '#500D18' }}>
+                    50,000+
+                  </div>
+                  <div style={{ fontSize: '12.5px', color: '#716A65', fontWeight: 500 }}>
+                    Trees Planted
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => scrollTo('stories')}
+                className="btn-burgundy"
+                style={{ fontSize: '14px' }}
+              >
+                <span>See Our Impact</span>
+                <ArrowRight size={16} />
+              </button>
+            </div>
+
+            <div style={{ position: 'relative' }}>
+              <div
+                style={{
+                  borderRadius: '24px',
+                  overflow: 'hidden',
+                  boxShadow: '0 20px 50px rgba(80, 13, 24, 0.15)',
+                  border: '2px solid rgba(217, 180, 91, 0.3)',
+                }}
+              >
+                <img
+                  src="/images/atharva/assets_images_resource_cause-4.jpg"
+                  alt="Atharva Foundation Girl Child Impact"
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    maxHeight: '500px',
+                    objectFit: 'cover',
+                    display: 'block',
+                  }}
+                  onError={(e) => {
+                    e.currentTarget.src = '/images/ui/impact_girl_portrait.jpg';
+                  }}
+                />
+              </div>
+
+              <div style={{ position: 'absolute', top: '-30px', right: '-30px', pointerEvents: 'none', opacity: 0.4 }}>
+                <BotanicalLeaf width={200} height={200} color="#D9B45B" opacity={0.6} />
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* Navigation Arrows */}
-          <button
-            type="button"
-            onClick={() => scrollCarousel('prev')}
-            className="carousel-nav-btn prev"
-            aria-label="Previous initiatives"
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M11 14l-5-5 5-5" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            onClick={() => scrollCarousel('next')}
-            className="carousel-nav-btn next"
-            aria-label="Next initiatives"
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M7 4l5 5-5 5" />
-            </svg>
-          </button>
+        {/* Quote Banner */}
+        <div
+          style={{
+            backgroundColor: '#310A10',
+            color: '#FFFFFF',
+            padding: '50px 24px',
+            position: 'relative',
+            textAlign: 'center',
+            borderTop: '2px solid #D9B45B',
+          }}
+        >
+          <div className="site-container" style={{ maxWidth: '820px' }}>
+            <span style={{ fontSize: '32px', color: '#D9B45B', fontFamily: 'var(--font-serif)' }}>“</span>
+            <p
+              style={{
+                fontFamily: 'var(--font-serif)',
+                fontSize: 'clamp(20px, 2.6vw, 28px)',
+                lineHeight: '1.45',
+                color: '#FFFFFF',
+                margin: '0 auto 16px auto',
+                fontStyle: 'italic',
+              }}
+            >
+              We believe in the power of people, working together for a <span style={{ color: '#D9B45B' }}>stronger, more inclusive India.</span>
+            </p>
+            <div
+              style={{
+                fontSize: '12px',
+                fontWeight: 700,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: 'rgba(255, 255, 255, 0.7)',
+              }}
+            >
+              — ATHARVA FOUNDATION
+            </div>
+          </div>
+        </div>
+      </section>
 
-          {/* Carousel Track */}
-          <div ref={carouselTrackRef} className="ideas-carousel-track">
-            {INITIATIVES.map((item, idx) => (
-              <Link to={item.link} key={idx} className="idea-card">
-                <div className="idea-image-wrap">
-                  <img src={item.image} alt={item.title} className="idea-image" loading="lazy" />
+      {/* ========================================================
+          SECTION 5: PEOPLE BEHIND THE PROGRESS (REAL LEADERSHIP & GROUND TEAMS)
+          ======================================================== */}
+      <section
+        id="people"
+        style={{
+          paddingTop: '80px',
+          paddingBottom: '80px',
+          backgroundColor: '#FFFFFF',
+        }}
+      >
+        <div className="site-container">
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+              flexWrap: 'wrap',
+              gap: '20px',
+              marginBottom: '36px',
+            }}
+          >
+            <div>
+              <span className="category-badge">PEOPLE BEHIND THE PROGRESS —</span>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 3.5vw, 42px)', color: '#500D18' }}>
+                A growing community of changemakers.
+              </h2>
+            </div>
+            <button
+              onClick={() => scrollTo('get-involved')}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#500D18',
+                fontWeight: 600,
+                fontSize: '14px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+              className="hover:text-amber-600 transition-colors"
+            >
+              <span>Meet our people</span>
+              <ArrowRight size={16} />
+            </button>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              gap: '24px',
+            }}
+          >
+            {[
+              {
+                role: 'Educators & Teachers',
+                desc: 'Dedicated rural teachers and instructors creating learning opportunities at the grassroots.',
+                img: '/images/atharva/assets_images_foundation-gallery_teachersday-25_td1.jpeg',
+                fallback: '/images/ui/people_educators.jpg',
+              },
+              {
+                role: 'Volunteers on Ground',
+                desc: 'Giving their time and skills for martyr families, health screenings, and children literacy.',
+                img: '/images/atharva/assets_images_gallery_gallery6.jpg',
+                fallback: '/images/ui/people_volunteers.jpg',
+              },
+              {
+                role: 'Armed Forces Welfare',
+                desc: 'Guided by ex-servicemen leaders like Col. Sudhir Raje (Retd.) to support martyrs across India.',
+                img: '/images/atharva/assets_images_team_team-1.jpg',
+                fallback: '/images/ui/people_community.jpg',
+              },
+              {
+                role: 'Student Changemakers',
+                desc: 'Atharva Engineering & Management students conducting digital camps and tree plantation drives.',
+                img: '/images/atharva/assets_images_foundation-gallery_technologyawareness_cover.jpg',
+                fallback: '/images/ui/people_students.jpg',
+              },
+            ].map((p, i) => (
+              <div
+                key={i}
+                className="editorial-card"
+                style={{
+                  borderRadius: '16px',
+                  backgroundColor: '#F8F3E9',
+                }}
+              >
+                <div className="card-img-wrap" style={{ height: '180px' }}>
+                  <img
+                    src={p.img}
+                    alt={p.role}
+                    onError={(e) => {
+                      e.currentTarget.src = p.fallback;
+                    }}
+                  />
                 </div>
-                <h3 className="idea-title">{item.title}</h3>
-                <p className="idea-desc">{item.description}</p>
-              </Link>
+                <div style={{ padding: '20px' }}>
+                  <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', color: '#500D18', marginBottom: '6px' }}>
+                    {p.role}
+                  </h4>
+                  <p style={{ fontSize: '13px', color: '#716A65', lineHeight: '1.5' }}>
+                    {p.desc}
+                  </p>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 5. OUR IMPACT & STATS SECTION */}
-      <section className="programs-section">
+      {/* ========================================================
+          SECTION 6: STORIES & MOMENTS (REAL STORIES)
+          ======================================================== */}
+      <section
+        id="stories"
+        style={{
+          paddingTop: '80px',
+          paddingBottom: '80px',
+          backgroundColor: '#F8F3E9',
+          borderTop: '1px solid rgba(80, 13, 24, 0.08)',
+        }}
+      >
         <div className="site-container">
-          <div className="section-badge-wrapper">
-            <span className="section-badge">Our Impact</span>
-            <hr className="duo-line" />
-          </div>
-
-          <div className="about-header-grid">
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+              flexWrap: 'wrap',
+              gap: '20px',
+              marginBottom: '36px',
+            }}
+          >
             <div>
-              <h2 className="about-title font-medium-serif">Action with measurable ground impact</h2>
-            </div>
-            <div>
-              <p className="text-lead">
-                The Atharva Foundation focuses on sustainable, empowering outcomes. Rather than short-term fixes, we build computer labs, provide educational scholarships, and stand with martyrs' families with lifelong dignity.
+              <span className="category-badge">STORIES & MOMENTS —</span>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 3.6vw, 42px)', color: '#500D18', marginBottom: '6px' }}>
+                Real stories. Real change.
+              </h2>
+              <p style={{ fontSize: '15px', color: '#716A65' }}>
+                From learning opportunities to tribute events, discover the moving stories behind Atharva Foundation's work.
               </p>
             </div>
-          </div>
-
-          <div className="programs-grid">
-            {/* Left Stats Card */}
-            <div className="stats-card">
-              <div className="stat-item">
-                <strong>100+</strong>
-                <span>Computers Distributed to Daughters</span>
-              </div>
-              <hr className="stat-divider" />
-              <div className="stat-item">
-                <strong>100+</strong>
-                <span>Martyr Families Felicitated & Supported</span>
-              </div>
-              <hr className="stat-divider" />
-              <div className="stat-item">
-                <strong>5,000+</strong>
-                <span>Girl Students Empowered Across India</span>
-              </div>
-            </div>
-
-            {/* Right Program List */}
-            <ul className="program-list">
-              {IMPACT_PROGRAMS.map((prog, idx) => (
-                <li key={idx}>
-                  <Link to="/our-programs" className="program-row">
-                    <span className="program-name">{prog}</span>
-                    <span className="btn-circle-arrow" aria-hidden="true">
-                      <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <path d="M4 9h10M10 5l4 4-4 4" />
-                      </svg>
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. GET INVOLVED / CONTACT SECTION */}
-      <section id="contact-form" className="newsletter-section">
-        <div className="site-container">
-          <div className="section-badge-wrapper">
-            <span className="section-badge">Join The Movement</span>
-            <hr className="duo-line" />
-          </div>
-
-          <div className="newsletter-grid">
-            <div>
-              <h2 className="about-title font-medium-serif">Get in Touch with Atharva Foundation</h2>
-              <p style={{ marginTop: '16px', color: '#64748B', lineHeight: 1.6 }}>
-                Whether you want to volunteer, sponsor girl child education, or support the families of our brave martyrs, your contribution brings real smiles and positive change.
-              </p>
-            </div>
-
-            <div>
-              {submitted ? (
-                <div style={{ padding: '24px', backgroundColor: 'var(--color-quartz)', border: '1px solid var(--color-alabaster)', borderRadius: '4px' }}>
-                  <h3 style={{ fontSize: '20px', color: 'var(--color-ocean)', marginBottom: '8px' }}>Thank you for reaching out!</h3>
-                  <p style={{ color: '#475569' }}>Our team will connect with you shortly. Together, let us put Nation First.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleFormSubmit} className="newsletter-form">
-                  <input
-                    type="text"
-                    required
-                    placeholder="Your Full Name *"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="form-input"
-                  />
-                  <input
-                    type="tel"
-                    placeholder="Phone Number"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="form-input"
-                  />
-                  <input
-                    type="email"
-                    required
-                    placeholder="Email Address *"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="form-input form-full"
-                  />
-                  <input
-                    type="text"
-                    placeholder="City / State"
-                    value={formData.city}
-                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    className="form-input form-full"
-                  />
-                  <textarea
-                    rows="3"
-                    placeholder="How would you like to contribute or get involved?"
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="form-input form-full"
-                    style={{ resize: 'vertical' }}
-                  />
-                  <button type="submit" className="btn-submit">
-                    Send Message
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Video Modal Player */}
-      {videoModalOpen && (
-        <div className="modal-overlay" onClick={() => setVideoModalOpen(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button
-              type="button"
-              onClick={() => setVideoModalOpen(false)}
-              className="modal-close-btn"
-              aria-label="Close video player"
+              onClick={() => onOpenVideo('mPlUSVVlW5g')}
+              className="btn-outline-dark"
+              style={{ fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
             >
-              <span>Close</span> &times;
+              <Play size={14} fill="#500D18" />
+              <span>Watch Tribute Film</span>
             </button>
-            <iframe
-              src={`https://www.youtube.com/embed/${activeVideoId}?autoplay=1`}
-              title="Atharva Foundation Video"
-              style={{ width: '100%', height: '100%', border: 'none' }}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+              gap: '24px',
+            }}
+          >
+            {/* Left Big Card: One For All Wagah Border */}
+            <div
+              className="editorial-card group"
+              style={{
+                borderRadius: '24px',
+                position: 'relative',
+                minHeight: '440px',
+                overflow: 'hidden',
+                backgroundColor: '#310A10',
+                cursor: 'pointer',
+              }}
+              onClick={() => onOpenVideo('mPlUSVVlW5g')}
+            >
+              <img
+                src="/images/atharva/assets_images_foundation-gallery_wagahborder_cover.jpg"
+                alt="One For All Tribute - Atharva Foundation"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  opacity: 0.85,
+                  transition: 'transform 0.6s ease',
+                }}
+                className="group-hover:scale-105"
+                onError={(e) => {
+                  e.currentTarget.src = '/images/atharva/assets_images_foundation-gallery_unsungheroes_cover.jpg';
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(to top, rgba(49, 10, 16, 0.95) 0%, rgba(49, 10, 16, 0.4) 50%, transparent 100%)',
+                }}
+              />
+
+              <div
+                style={{
+                  position: 'relative',
+                  zIndex: 2,
+                  marginTop: 'auto',
+                  padding: '32px',
+                  color: '#FFFFFF',
+                }}
+              >
+                <span style={{ fontSize: '11px', letterSpacing: '0.12em', color: '#D9B45B', fontWeight: 700, textTransform: 'uppercase' }}>
+                  NATIONAL TRIBUTE DOCUMENTARY
+                </span>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '26px', color: '#FFFFFF', margin: '6px 0 10px 0' }}>
+                  One For All | All For One
+                </h3>
+                <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.6', marginBottom: '20px', maxWidth: '420px' }}>
+                  Commemorating the untold stories of ten brave soldiers and martyrs with dignitaries, armed forces, and thousands of civilians.
+                </p>
+                <div
+                  style={{
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '50%',
+                    backgroundColor: '#D9B45B',
+                    color: '#380C14',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  className="group-hover:scale-110 transition-transform"
+                >
+                  <Play size={18} fill="#380C14" style={{ marginLeft: '2px' }} />
+                </div>
+              </div>
+            </div>
+
+            {/* Right 2 Stacked Cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <div
+                className="editorial-card group"
+                style={{
+                  borderRadius: '20px',
+                  position: 'relative',
+                  minHeight: '210px',
+                  overflow: 'hidden',
+                  backgroundColor: '#310A10',
+                  flex: 1,
+                }}
+              >
+                <img
+                  src="/images/atharva/assets_images_foundation-gallery_technologyawareness_cover.jpg"
+                  alt="Digital Access Opens Doors"
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    opacity: 0.82,
+                    transition: 'transform 0.6s ease',
+                  }}
+                  className="group-hover:scale-105"
+                  onError={(e) => {
+                    e.currentTarget.src = '/images/ui/story_digital.jpg';
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to top, rgba(49, 10, 16, 0.92) 0%, rgba(49, 10, 16, 0.3) 60%, transparent 100%)',
+                  }}
+                />
+                <div style={{ position: 'relative', zIndex: 2, marginTop: 'auto', padding: '24px', color: '#FFFFFF' }}>
+                  <span style={{ fontSize: '10.5px', letterSpacing: '0.12em', color: '#D9B45B', fontWeight: 700, textTransform: 'uppercase' }}>
+                    DIGITAL EMPOWERMENT
+                  </span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: '4px' }}>
+                    <div>
+                      <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', color: '#FFFFFF', margin: 0 }}>
+                        Digital access opens doors
+                      </h4>
+                      <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.8)', margin: '4px 0 0 0', maxWidth: '340px' }}>
+                        Providing computer labs in remote border villages so young girls can build tech futures.
+                      </p>
+                    </div>
+                    <button
+                      onClick={onOpenDonate}
+                      style={{
+                        width: '36px',
+                        height: '36px',
+                        borderRadius: '50%',
+                        backgroundColor: 'rgba(217, 180, 91, 0.25)',
+                        border: '1px solid #D9B45B',
+                        color: '#D9B45B',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        flexShrink: 0,
+                      }}
+                      className="hover:scale-110 hover:bg-amber-400 hover:text-burgundy transition-all"
+                    >
+                      <ArrowRight size={16} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className="editorial-card group"
+                style={{
+                  borderRadius: '20px',
+                  position: 'relative',
+                  minHeight: '210px',
+                  overflow: 'hidden',
+                  backgroundColor: '#310A10',
+                  flex: 1,
+                }}
+              >
+                <img
+                  src="/images/atharva/assets_images_foundation-gallery_womensdayindiandefenceforce_cover.jpg"
+                  alt="Women who inspire"
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    opacity: 0.82,
+                    transition: 'transform 0.6s ease',
+                  }}
+                  className="group-hover:scale-105"
+                  onError={(e) => {
+                    e.currentTarget.src = '/images/ui/story_women_inspire.jpg';
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to top, rgba(49, 10, 16, 0.92) 0%, rgba(49, 10, 16, 0.3) 60%, transparent 100%)',
+                  }}
+                />
+                <div style={{ position: 'relative', zIndex: 2, marginTop: 'auto', padding: '24px', color: '#FFFFFF' }}>
+                  <span style={{ fontSize: '10.5px', letterSpacing: '0.12em', color: '#D9B45B', fontWeight: 700, textTransform: 'uppercase' }}>
+                    WOMEN ACHIEVERS
+                  </span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: '4px' }}>
+                    <div>
+                      <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', color: '#FFFFFF', margin: 0 }}>
+                        Women who inspire
+                      </h4>
+                      <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.8)', margin: '4px 0 0 0', maxWidth: '340px' }}>
+                        Honoring the courage and leadership of women in defense forces, sports, and rural enterprise.
+                      </p>
+                    </div>
+                    <button
+                      onClick={onOpenDonate}
+                      style={{
+                        width: '36px',
+                        height: '36px',
+                        borderRadius: '50%',
+                        backgroundColor: 'rgba(217, 180, 91, 0.25)',
+                        border: '1px solid #D9B45B',
+                        color: '#D9B45B',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        flexShrink: 0,
+                      }}
+                      className="hover:scale-110 hover:bg-amber-400 hover:text-burgundy transition-all"
+                    >
+                      <ArrowRight size={16} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      )}
+      </section>
+
+      {/* ========================================================
+          NEW SECTION: AUTHENTIC GROUND GALLERY STRIP
+          ======================================================== */}
+      <section
+        style={{
+          paddingTop: '70px',
+          paddingBottom: '70px',
+          backgroundColor: '#FFFFFF',
+        }}
+      >
+        <div className="site-container">
+          <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 36px auto' }}>
+            <span className="category-badge">GROUND WORK & ARCHIVES —</span>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 3.5vw, 40px)', color: '#500D18' }}>
+              Moments from the Ground
+            </h2>
+            <p style={{ fontSize: '14.5px', color: '#716A65' }}>
+              Real photographs from Atharva Foundation drives, defense tributes, schools, and martyr family support.
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              gap: '18px',
+            }}
+          >
+            {GALLERY_PHOTOS.map((g, idx) => (
+              <div
+                key={idx}
+                className="editorial-card group"
+                style={{
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  position: 'relative',
+                  height: '210px',
+                }}
+              >
+                <img
+                  src={g.img}
+                  alt={g.title}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    transition: 'transform 0.6s ease',
+                  }}
+                  className="group-hover:scale-108"
+                  onError={(e) => {
+                    e.currentTarget.src = '/images/atharva/assets_images_resource_1J6A2037.jpg';
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to top, rgba(56, 12, 20, 0.9) 0%, rgba(56, 12, 20, 0.2) 60%, transparent 100%)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'flex-end',
+                    padding: '16px',
+                    color: '#FFFFFF',
+                  }}
+                >
+                  <span style={{ fontSize: '10px', color: '#D9B45B', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                    {g.tag}
+                  </span>
+                  <div style={{ fontSize: '13px', fontWeight: 600 }}>
+                    {g.title}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================
+          SECTION 7: GET INVOLVED & INLINE MESSAGE FORM
+          ======================================================== */}
+      <section
+        id="get-involved"
+        style={{
+          paddingTop: '80px',
+          paddingBottom: '80px',
+          backgroundColor: '#F8F3E9',
+          borderTop: '1px solid rgba(80, 13, 24, 0.08)',
+        }}
+      >
+        <div className="site-container">
+          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 48px auto' }}>
+            <span className="category-badge">JOIN THE MOVEMENT —</span>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(30px, 4vw, 44px)', color: '#500D18', marginBottom: '12px' }}>
+              Many ways to <span style={{ color: '#D9B45B', fontStyle: 'italic' }}>make a difference.</span>
+            </h2>
+            <p style={{ fontSize: '15px', color: '#716A65', lineHeight: '1.7' }}>
+              Be a part of our journey towards a more inclusive and equitable society. Participate, volunteer or partner with us to support our real initiatives on the ground.
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '24px',
+              marginBottom: '56px',
+            }}
+          >
+            <div
+              className="editorial-card"
+              style={{
+                borderRadius: '20px',
+                backgroundColor: '#FFFFFF',
+              }}
+            >
+              <div className="card-img-wrap" style={{ height: '210px', position: 'relative' }}>
+                <img
+                  src="/images/atharva/assets_images_resource_cause-4.jpg"
+                  alt="Support an Initiative"
+                  onError={(e) => {
+                    e.currentTarget.src = '/images/ui/get_involved_card1.jpg';
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: '-18px',
+                    left: '20px',
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '50%',
+                    backgroundColor: '#FFFFFF',
+                    border: '2px solid #D9B45B',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#500D18',
+                    boxShadow: '0 4px 12px rgba(80, 13, 24, 0.15)',
+                    zIndex: 2,
+                  }}
+                >
+                  <BookOpen size={20} />
+                </div>
+              </div>
+              <div style={{ padding: '30px 24px 24px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', color: '#500D18', marginBottom: '8px' }}>
+                  Support an Initiative
+                </h3>
+                <p style={{ fontSize: '13.5px', color: '#716A65', lineHeight: '1.6', flex: 1, marginBottom: '20px' }}>
+                  Help us strengthen education, women empowerment, healthcare, and support for families of martyrs through verified projects.
+                </p>
+                <button
+                  onClick={onOpenDonate}
+                  className="btn-outline-dark"
+                  style={{ width: '100%', justifyContent: 'center', fontSize: '13.5px' }}
+                >
+                  <span>Explore Ways to Help</span>
+                  <ArrowRight size={15} />
+                </button>
+              </div>
+            </div>
+
+            <div
+              className="editorial-card"
+              style={{
+                borderRadius: '20px',
+                backgroundColor: '#FFFFFF',
+              }}
+            >
+              <div className="card-img-wrap" style={{ height: '210px', position: 'relative' }}>
+                <img
+                  src="/images/atharva/assets_images_gallery_gallery6.jpg"
+                  alt="Volunteer"
+                  onError={(e) => {
+                    e.currentTarget.src = '/images/ui/get_involved_card2.jpg';
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: '-18px',
+                    left: '20px',
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '50%',
+                    backgroundColor: '#FFFFFF',
+                    border: '2px solid #D9B45B',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#500D18',
+                    boxShadow: '0 4px 12px rgba(80, 13, 24, 0.15)',
+                    zIndex: 2,
+                  }}
+                >
+                  <Users size={20} />
+                </div>
+              </div>
+              <div style={{ padding: '30px 24px 24px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', color: '#500D18', marginBottom: '8px' }}>
+                  Become a Volunteer
+                </h3>
+                <p style={{ fontSize: '13.5px', color: '#716A65', lineHeight: '1.6', flex: 1, marginBottom: '20px' }}>
+                  Contribute your time, skills, and mentorship to create meaningful change in remote and rural communities.
+                </p>
+                <button
+                  onClick={onOpenDonate}
+                  className="btn-outline-dark"
+                  style={{ width: '100%', justifyContent: 'center', fontSize: '13.5px' }}
+                >
+                  <span>Become a Volunteer</span>
+                  <ArrowRight size={15} />
+                </button>
+              </div>
+            </div>
+
+            <div
+              className="editorial-card"
+              style={{
+                borderRadius: '20px',
+                backgroundColor: '#FFFFFF',
+              }}
+            >
+              <div className="card-img-wrap" style={{ height: '210px', position: 'relative' }}>
+                <img
+                  src="/images/atharva/assets_images_team_team-2.jpg"
+                  alt="Partner With Us"
+                  onError={(e) => {
+                    e.currentTarget.src = '/images/ui/get_involved_card3.jpg';
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: '-18px',
+                    left: '20px',
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '50%',
+                    backgroundColor: '#FFFFFF',
+                    border: '2px solid #D9B45B',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#500D18',
+                    boxShadow: '0 4px 12px rgba(80, 13, 24, 0.15)',
+                    zIndex: 2,
+                  }}
+                >
+                  <Handshake size={20} />
+                </div>
+              </div>
+              <div style={{ padding: '30px 24px 24px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', color: '#500D18', marginBottom: '8px' }}>
+                  CSR & Institution Partner
+                </h3>
+                <p style={{ fontSize: '13.5px', color: '#716A65', lineHeight: '1.6', flex: 1, marginBottom: '20px' }}>
+                  Collaborate with us as CSR partners or institutions to scale social-impact initiatives that create lasting community value.
+                </p>
+                <button
+                  onClick={() => scrollTo('contact-form')}
+                  className="btn-outline-dark"
+                  style={{ width: '100%', justifyContent: 'center', fontSize: '13.5px' }}
+                >
+                  <span>Contact the Foundation</span>
+                  <ArrowRight size={15} />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact / Get In Touch Form (From previous version) */}
+          <div
+            id="contact-form"
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '24px',
+              padding: 'clamp(28px, 4vw, 48px)',
+              border: '1px solid rgba(80, 13, 24, 0.1)',
+              boxShadow: '0 10px 30px rgba(80, 13, 24, 0.05)',
+              marginBottom: '48px',
+            }}
+          >
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '36px', alignItems: 'center' }}>
+              <div>
+                <span className="category-badge">CONNECT WITH US —</span>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(24px, 3vw, 36px)', color: '#500D18', marginBottom: '14px' }}>
+                  Get in Touch with Atharva Foundation
+                </h3>
+                <p style={{ fontSize: '14.5px', color: '#716A65', lineHeight: '1.7', marginBottom: '20px' }}>
+                  Whether you want to volunteer, sponsor girl child education, or support the families of our brave martyrs, your contribution brings real smiles and positive change.
+                </p>
+                <div style={{ fontSize: '13px', color: '#500D18', fontWeight: 600 }}>
+                  📍 Atharva Educational Complex, Malad Marve Road, Mumbai-400095 <br />
+                  📞 +91 22 40294949 · ✉️ foundation@atharva.edu.in
+                </div>
+              </div>
+
+              <div>
+                {formSubmitted ? (
+                  <div
+                    style={{
+                      backgroundColor: 'rgba(217, 180, 91, 0.15)',
+                      border: '1px solid #D9B45B',
+                      borderRadius: '16px',
+                      padding: '28px',
+                      textAlign: 'center',
+                    }}
+                  >
+                    <CheckCircle2 size={36} color="#500D18" style={{ margin: '0 auto 12px auto' }} />
+                    <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', color: '#500D18', marginBottom: '8px' }}>
+                      Thank you for reaching out!
+                    </h4>
+                    <p style={{ fontSize: '13.5px', color: '#292321', lineHeight: '1.6' }}>
+                      Our team will connect with you shortly. Together, let us put <strong>Nation First</strong>.
+                    </p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleContactSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Your Full Name *"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        style={{
+                          padding: '12px 14px',
+                          borderRadius: '8px',
+                          border: '1px solid rgba(80, 13, 24, 0.2)',
+                          backgroundColor: '#F8F3E9',
+                          fontSize: '14px',
+                          outline: 'none',
+                        }}
+                      />
+                      <input
+                        type="tel"
+                        placeholder="Phone Number"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        style={{
+                          padding: '12px 14px',
+                          borderRadius: '8px',
+                          border: '1px solid rgba(80, 13, 24, 0.2)',
+                          backgroundColor: '#F8F3E9',
+                          fontSize: '14px',
+                          outline: 'none',
+                        }}
+                      />
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+                      <input
+                        type="email"
+                        required
+                        placeholder="Email Address *"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        style={{
+                          padding: '12px 14px',
+                          borderRadius: '8px',
+                          border: '1px solid rgba(80, 13, 24, 0.2)',
+                          backgroundColor: '#F8F3E9',
+                          fontSize: '14px',
+                          outline: 'none',
+                        }}
+                      />
+                      <input
+                        type="text"
+                        placeholder="City / State"
+                        value={formData.city}
+                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                        style={{
+                          padding: '12px 14px',
+                          borderRadius: '8px',
+                          border: '1px solid rgba(80, 13, 24, 0.2)',
+                          backgroundColor: '#F8F3E9',
+                          fontSize: '14px',
+                          outline: 'none',
+                        }}
+                      />
+                    </div>
+                    <textarea
+                      rows="3"
+                      placeholder="How would you like to contribute or get involved?"
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      style={{
+                        padding: '12px 14px',
+                        borderRadius: '8px',
+                        border: '1px solid rgba(80, 13, 24, 0.2)',
+                        backgroundColor: '#F8F3E9',
+                        fontSize: '14px',
+                        outline: 'none',
+                        resize: 'vertical',
+                      }}
+                    />
+                    <button
+                      type="submit"
+                      className="btn-burgundy"
+                      style={{ alignSelf: 'flex-start', padding: '12px 28px', fontSize: '14px' }}
+                    >
+                      <span>Send Message</span>
+                      <Send size={15} />
+                    </button>
+                  </form>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Closing Banner */}
+          <div
+            id="closing-banner"
+            style={{
+              backgroundColor: '#310A10',
+              borderRadius: '24px',
+              overflow: 'hidden',
+              position: 'relative',
+              color: '#FFFFFF',
+              boxShadow: '0 20px 45px rgba(49, 10, 16, 0.35)',
+              border: '1px solid rgba(217, 180, 91, 0.3)',
+            }}
+          >
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                alignItems: 'center',
+              }}
+            >
+              <div style={{ padding: '48px 40px', zIndex: 2 }}>
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-serif)',
+                    fontSize: 'clamp(26px, 3.4vw, 38px)',
+                    color: '#FFFFFF',
+                    lineHeight: '1.2',
+                    marginBottom: '14px',
+                  }}
+                >
+                  Change happens <br />
+                  when people come <span style={{ color: '#D9B45B', fontStyle: 'italic' }}>together.</span>
+                </h3>
+                <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.65', marginBottom: '28px', maxWidth: '440px' }}>
+                  Join hands with Atharva Foundation and be part of initiatives that create lasting impact in communities across India.
+                </p>
+                <button
+                  onClick={onOpenDonate}
+                  className="btn-gold"
+                  style={{ fontSize: '15px' }}
+                >
+                  <span>Be Part of the Change</span>
+                  <ArrowRight size={17} />
+                </button>
+              </div>
+
+              <div style={{ height: '100%', minHeight: '280px', position: 'relative' }}>
+                <img
+                  src="/images/atharva/assets_images_resource_1J6A2037.jpg"
+                  alt="Atharva Foundation Changemakers"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                  }}
+                  onError={(e) => {
+                    e.currentTarget.src = '/images/ui/get_involved_boys_banner.jpg';
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to right, #310A10 0%, transparent 40%)',
+                  }}
+                  className="hidden md:block"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
